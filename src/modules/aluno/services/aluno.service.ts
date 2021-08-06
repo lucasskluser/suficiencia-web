@@ -20,6 +20,11 @@ export class AlunoService {
 
   async obterAlunoPorId(id: number): Promise<GetAlunoDTO> {
     const aluno = await this.alunoRepository.findOne({ id });
+
+    if (!aluno) {
+      return null;
+    }
+
     return aluno.toDTO();
   }
 
