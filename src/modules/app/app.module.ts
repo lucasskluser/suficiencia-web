@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AlunoModule } from '../aluno/aluno.module';
+import { UsuarioModule } from '../usuario/usuario.module';
 
 @Module({
   imports: [
     AlunoModule,
+    UsuarioModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -14,7 +16,6 @@ import { AlunoModule } from '../aluno/aluno.module';
       database: 'escola',
       entities: ['**/**/*.entity.js'],
       synchronize: true,
-      logging: true,
     }),
   ],
   controllers: [],
