@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -130,6 +131,25 @@ export class UsuarioService {
 
   private async gerarChave(): Promise<string> {
     return await bcrypt.genSalt();
+  }
+
+  async verificarEmailSenha(
+    email: string,
+    senha: string,
+  ): Promise<GetUsuarioDTO> {
+    const usuario = await this.usuarioRepository.findOne({ email });
+
+    if (!usuario) {
+      throw new NotFoundException(
+        `Usuário com e-mail '${email}' não encontrado`,
+      );
+    }
+
+    if (!(await bcrypt.compare(senha, usuario.senha))) {
+      throw new UnauthorizedException('A senha do usuário está incorreta');
+    }
+
+    return usuario.toDTO();
   }
 
   private async hashSenha(chave: string, senha: string): Promise<string> {

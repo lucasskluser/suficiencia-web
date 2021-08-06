@@ -1,17 +1,18 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   HttpCode,
   HttpStatus,
-  NotFoundException,
-  Param,
   Patch,
   Post,
   Put,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/modules/autenticacao/guards/jwt.guard';
 import {
   CreateUsuarioDTO,
   EditUsuarioDTO,
@@ -24,15 +25,10 @@ import { UsuarioService } from '../../services/usuario.service';
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
-  @Get(':id')
-  async obterUsuario(@Param('id') id: string): Promise<GetUsuarioDTO> {
-    const usuario = await this.usuarioService.obterUsuarioPorId(parseInt(id));
-
-    if (!usuario) {
-      throw new NotFoundException(`Usuário com id '${id}' não encontrado`);
-    }
-
-    return usuario;
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async obterUsuario(@Req() requisicao: any): Promise<GetUsuarioDTO> {
+    return requisicao.user;
   }
 
   @Post()
@@ -45,42 +41,45 @@ export class UsuarioController {
     );
   }
 
-  @Put(':id')
+  @Put()
+  @UseGuards(JwtAuthGuard)
   async editarUsuario(
-    @Param('id') id: string,
+    @Req() requisicao: any,
     @Body() usuario: EditUsuarioDTO,
   ): Promise<GetUsuarioDTO> {
     usuario = new EditUsuarioDTO(usuario);
 
-    if (parseInt(id) !== usuario.id) {
-      throw new BadRequestException(
-        'O id do usuário informado na URL é diferente do id informado no corpo da requisição',
+    if (requisicao.user.id !== usuario.id) {
+      throw new ForbiddenException(
+        'O usuário não possui permissão para alterar dados de outros usuários',
       );
     }
 
     return await this.usuarioService.editarUsuario(usuario);
   }
 
-  @Patch(':id')
+  @Patch()
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async alterarSenha(
-    @Param('id') id: string,
+    @Req() requisicao: any,
     @Body() usuario: EditUsuarioSenhaDTO,
   ) {
     usuario = new EditUsuarioSenhaDTO(usuario);
 
-    if (parseInt(id) !== usuario.id) {
-      throw new BadRequestException(
-        'O id do usuário informado na URL é diferente do id informado no corpo da requisição',
+    if (requisicao.usuario.id !== usuario.id) {
+      throw new ForbiddenException(
+        'O usuário não possui permissão para alterar dados de outros usuários',
       );
     }
 
     await this.usuarioService.alterarSenha(usuario);
   }
 
-  @Delete(':id')
+  @Delete()
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deletarUsuario(@Param('id') id: string) {
-    await this.usuarioService.deletarUsuario(parseInt(id));
+  async deletarUsuario(@Req() requisicao: any) {
+    await this.usuarioService.deletarUsuario(requisicao.usuario.id);
   }
 }
