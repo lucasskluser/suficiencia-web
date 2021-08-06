@@ -12,12 +12,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import {
-  CreateAlunoDTO,
-  EditAlunoDTO,
-  GetAlunoDTO,
-} from '../../dtos/aluno.dto';
-import { AlunoService } from '../../services/aluno.service';
+import { GetAlunoDTO, CreateAlunoDTO, EditAlunoDTO } from '../dtos/aluno.dto';
+import { AlunoService } from '../services/aluno.service';
 
 @Controller('aluno')
 export class AlunoController {
@@ -29,6 +25,7 @@ export class AlunoController {
     return alunos;
   }
 
+  @Get(':id')
   async obterAlunoPorId(@Param('id') id: string): Promise<GetAlunoDTO> {
     const aluno = await this.alunoService.obterAlunoPorId(parseInt(id));
 
@@ -40,6 +37,7 @@ export class AlunoController {
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async criarAluno(@Body() aluno: CreateAlunoDTO): Promise<GetAlunoDTO> {
     return await this.alunoService.criarAluno(new CreateAlunoDTO(aluno));
   }
@@ -66,7 +64,9 @@ export class AlunoController {
     const deletado = await this.alunoService.deletarAluno(parseInt(id));
 
     if (!deletado) {
-      throw new InternalServerErrorException("Não foi possível deletar o aluno");
+      throw new InternalServerErrorException(
+        'Não foi possível deletar o aluno',
+      );
     }
   }
 }
