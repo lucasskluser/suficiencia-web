@@ -17,3 +17,15 @@ export class AutenticacaoDTO {
     Object.assign(this, partial);
   }
 }
+
+export class TokensDTO {
+  @IsString({ message: 'O access token deve ser do tipo texto (string)' })
+  accessToken: string;
+
+  @IsString({ message: 'O refresh token deve ser do tipo texto (string)' })
+  refreshToken: string;
+
+  constructor(partial: Partial<TokensDTO>) {
+    Object.assign(this, partial);
+  }
+}

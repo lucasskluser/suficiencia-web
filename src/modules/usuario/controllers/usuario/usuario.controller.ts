@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  ForbiddenException,
   Get,
   HttpCode,
   HttpStatus,
@@ -48,14 +47,7 @@ export class UsuarioController {
     @Body() usuario: EditUsuarioDTO,
   ): Promise<GetUsuarioDTO> {
     usuario = new EditUsuarioDTO(usuario);
-
-    if (requisicao.user.id !== usuario.id) {
-      throw new ForbiddenException(
-        'O usuário não possui permissão para alterar dados de outros usuários',
-      );
-    }
-
-    return await this.usuarioService.editarUsuario(usuario);
+    return await this.usuarioService.editarUsuario(requisicao.user.id, usuario);
   }
 
   @Patch()
@@ -66,20 +58,13 @@ export class UsuarioController {
     @Body() usuario: EditUsuarioSenhaDTO,
   ) {
     usuario = new EditUsuarioSenhaDTO(usuario);
-
-    if (requisicao.usuario.id !== usuario.id) {
-      throw new ForbiddenException(
-        'O usuário não possui permissão para alterar dados de outros usuários',
-      );
-    }
-
-    await this.usuarioService.alterarSenha(usuario);
+    await this.usuarioService.alterarSenha(requisicao.user.id, usuario);
   }
 
   @Delete()
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deletarUsuario(@Req() requisicao: any) {
-    await this.usuarioService.deletarUsuario(requisicao.usuario.id);
+    await this.usuarioService.deletarUsuario(requisicao.user.id);
   }
 }

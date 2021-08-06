@@ -11,11 +11,14 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/modules/autenticacao/guards/jwt.guard';
 import { GetAlunoDTO, CreateAlunoDTO, EditAlunoDTO } from '../dtos/aluno.dto';
 import { AlunoService } from '../services/aluno.service';
 
 @Controller('aluno')
+@UseGuards(JwtAuthGuard)
 export class AlunoController {
   constructor(private readonly alunoService: AlunoService) {}
 

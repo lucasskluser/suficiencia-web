@@ -1,7 +1,6 @@
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -25,9 +24,6 @@ export class AlunoEntity {
   @UpdateDateColumn({ nullable: true })
   dataAtualizacao?: Date;
 
-  @DeleteDateColumn({ nullable: true })
-  dataDelecao?: Date;
-
   constructor(nome: string, telefone: string) {
     this.nome = nome;
     this.telefone = telefone;
@@ -40,7 +36,6 @@ export class AlunoEntity {
       telefone: this.telefone,
       dataCriacao: this.dataCriacao,
       dataAtualizacao: this.dataAtualizacao,
-      dataDelecao: this.dataDelecao,
     });
   }
 }

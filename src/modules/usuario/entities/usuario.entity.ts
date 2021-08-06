@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { GetUsuarioDTO } from '../dtos/usuario.dto';
 
-@Entity('usuario')
+@Entity('usuarios')
 export class UsuarioEntity {
   @PrimaryGeneratedColumn()
   id: number;

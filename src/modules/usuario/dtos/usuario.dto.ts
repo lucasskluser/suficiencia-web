@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsNumber,
-  IsString,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
 import { UsuarioEntity } from '../entities/usuario.entity';
 
 export class GetUsuarioDTO {
@@ -57,12 +51,6 @@ export class CreateUsuarioDTO {
 }
 
 export class EditUsuarioDTO {
-  @IsNumber(
-    { allowNaN: false, allowInfinity: false, maxDecimalPlaces: 0 },
-    { message: 'O id do usuário deve ser um número inteiro' },
-  )
-  id: number;
-
   @IsString({ message: 'O nome do usuário deve ser do tipo texto (string)' })
   @MinLength(3, {
     message: 'O nome do usuário deve ter, no mínimo, 3 caracteres',
@@ -81,12 +69,6 @@ export class EditUsuarioDTO {
 }
 
 export class EditUsuarioSenhaDTO {
-  @IsNumber(
-    { allowNaN: false, allowInfinity: false, maxDecimalPlaces: 0 },
-    { message: 'O id do usuário deve ser um número inteiro' },
-  )
-  id: number;
-
   @IsString({
     message: 'A senha atual do usuário deve ser do tipo texto (string)',
   })

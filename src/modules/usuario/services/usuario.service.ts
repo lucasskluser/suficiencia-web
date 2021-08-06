@@ -62,15 +62,16 @@ export class UsuarioService {
     return new UsuarioEntity(usuarioCriado).toDTO();
   }
 
-  async editarUsuario(usuario: EditUsuarioDTO): Promise<GetUsuarioDTO> {
+  async editarUsuario(
+    id: number,
+    usuario: EditUsuarioDTO,
+  ): Promise<GetUsuarioDTO> {
     let usuarioExistente = await this.usuarioRepository.findOne({
-      id: usuario.id,
+      id,
     });
 
     if (!usuarioExistente) {
-      throw new NotFoundException(
-        `Usuário com id '${usuario.id}' não foi encontrado`,
-      );
+      throw new NotFoundException(`Usuário com id '${id}' não foi encontrado`);
     }
 
     usuarioExistente = this.usuarioRepository.merge(usuarioExistente, {
@@ -82,15 +83,16 @@ export class UsuarioService {
     return usuarioExistente.toDTO();
   }
 
-  async alterarSenha(usuario: EditUsuarioSenhaDTO): Promise<boolean> {
+  async alterarSenha(
+    id: number,
+    usuario: EditUsuarioSenhaDTO,
+  ): Promise<boolean> {
     const usuarioExistente = await this.usuarioRepository.findOne({
-      id: usuario.id,
+      id,
     });
 
     if (!usuarioExistente) {
-      throw new NotFoundException(
-        `Usuário com id '${usuario.id}' não foi encontrado`,
-      );
+      throw new NotFoundException(`Usuário com id '${id}' não foi encontrado`);
     }
 
     if (!(await bcrypt.compare(usuario.senhaAtual, usuarioExistente.senha))) {

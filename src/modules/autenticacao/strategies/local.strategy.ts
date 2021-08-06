@@ -13,7 +13,9 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const usuario = await this.autenticacaoService.autenticar(email, senha);
 
     if (!usuario) {
-      throw new UnauthorizedException('O usuário deve ser autenticado');
+      throw new UnauthorizedException(
+        'Os dados de acesso do usuário são inválidos',
+      );
     }
 
     return usuario;

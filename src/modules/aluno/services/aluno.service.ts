@@ -61,7 +61,7 @@ export class AlunoService {
       throw new NotFoundException(`O aluno com id '${id}' não foi encontrado`);
     }
 
-    await this.alunoRepository.softRemove(aluno);
+    await this.alunoRepository.delete(aluno);
     return true;
   }
 }
