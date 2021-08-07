@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "rimraf dist && nest build",
-    "start": "npm run build && node dist/main",
+    "start": "node dist/main",
     "start:dev": "nest start --watch"
   },
   "dependencies": {
