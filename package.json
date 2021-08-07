@@ -21,6 +21,7 @@
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "dotenv": "^8.6.0",
     "js-yaml": "^3.14.1",
     "mysql2": "^2.3.0",
     "passport": "^0.4.1",
