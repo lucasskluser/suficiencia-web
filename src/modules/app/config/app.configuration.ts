@@ -11,6 +11,7 @@ export default () => {
   if (!existsSync(filePath)) {
     console.log('YAML config file not found, using environment variables');
     loadEnvVars();
+    console.log(process.env);
     return;
   }
 

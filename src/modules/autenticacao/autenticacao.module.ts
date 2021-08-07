@@ -17,18 +17,14 @@ import { LocalStrategy } from './strategies/local.strategy';
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        console.log('jwt.secret', configService.get('jwt.secret'));
-
-        return {
-          secret: configService.get('jwt.secret'),
-          signOptions: {
-            expiresIn: configService.get('jwt.expiration'),
-            issuer: configService.get('jwt.issuer'),
-            audience: configService.get('jwt.audience'),
-          },
-        };
-      },
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('jwt.secret'),
+        signOptions: {
+          expiresIn: configService.get('jwt.expiration'),
+          issuer: configService.get('jwt.issuer'),
+          audience: configService.get('jwt.audience'),
+        },
+      }),
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([RefreshTokenEntity]),
