@@ -16,12 +16,12 @@ export class TokenService {
 
   constructor(
     private readonly jwtService: JwtService,
-    configService: ConfigService,
+    private readonly configService: ConfigService,
   ) {
     this.tokenBaseOptions = {
-      audience: configService.get('jwt.audience'),
-      issuer: configService.get('jwt.issuer'),
-      expiresIn: configService.get('jwt.expiration.access'),
+      audience: configService.get('JWT_AUDIENCE'),
+      issuer: configService.get('JWT_ISSUER'),
+      expiresIn: configService.get('JWT_ACCESS_EXPIRATION'),
     };
   }
 
@@ -48,7 +48,10 @@ export class TokenService {
       sub: usuario.id,
     };
 
-    const refreshToken = this.jwtService.sign(payload, this.tokenBaseOptions);
+    const refreshToken = this.jwtService.sign(payload, {
+      ...this.tokenBaseOptions,
+      expiresIn: this.configService.get('JWT_REFRESH_EXPIRATION'),
+    });
 
     await this.refreshTokenRepository.delete({ usuario: { id: usuario.id } });
 
