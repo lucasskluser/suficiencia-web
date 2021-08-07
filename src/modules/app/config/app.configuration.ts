@@ -9,6 +9,7 @@ export default () => {
   const filePath = join(__dirname, YAML_CONFIG_FILENAME);
 
   if (!existsSync(filePath)) {
+    console.log('YAML config file not found, using environment variables');
     loadEnvVars();
     return;
   }
